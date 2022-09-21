@@ -1,0 +1,130 @@
+# NOTE: The manifests below and the resulting etcd cluster are meant for testing purposes only.
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: cilium-etcd
+  name: cilium-etcd-client
+  namespace: "${CILIUM_NAMESPACE}"
+spec:
+  ports:
+  - name: etcd-client
+    port: 2379
+    protocol: TCP
+    targetPort: 2379
+  selector:
+    # Do not change the labels below. They must map exactly to
+    # https://github.com/cilium/cilium/blob/v1.12.2/pkg/identity/numericidentity.go#L207-L348
+    app: etcd
+    io.cilium/app: etcd-operator
+    etcd_cluster: cilium-etcd
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: cilium-etcd
+  name: cilium-etcd
+  namespace: "${CILIUM_NAMESPACE}"
+spec:
+  clusterIP: None
+  ports:
+  - port: 2379
+    name: client
+  - port: 2380
+    name: peer
+  publishNotReadyAddresses: true
+  selector:
+    # Do not change the labels below. They must map exactly to
+    # https://github.com/cilium/cilium/blob/v1.12.2/pkg/identity/numericidentity.go#L207-L348
+    app: etcd
+    io.cilium/app: etcd-operator
+    etcd_cluster: cilium-etcd
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/name: cilium-etcd
+  name: cilium-etcd
+  namespace: "${CILIUM_NAMESPACE}"
+spec:
+  podManagementPolicy: Parallel
+  selector:
+    matchLabels:
+      # Do not change the labels below. They must map exactly to
+      # https://github.com/cilium/cilium/blob/v1.12.2/pkg/identity/numericidentity.go#L207-L348
+      app: etcd
+      io.cilium/app: etcd-operator
+      etcd_cluster: cilium-etcd
+  serviceName: cilium-etcd
+  replicas: 3
+  template:
+    metadata:
+      name: cilium-etcd
+      labels:
+        # Do not change the labels below. They must map exactly to
+        # https://github.com/cilium/cilium/blob/v1.12.2/pkg/identity/numericidentity.go#L207-L348
+        app: etcd
+        io.cilium/app: etcd-operator
+        etcd_cluster: cilium-etcd
+    spec:
+      containers:
+      - name: etcd
+        image: quay.io/coreos/etcd:v3.5.4
+        command:
+          - etcd
+          - --data-dir=/var/run/etcd/default.etcd
+          - --name=$(POD_NAME)
+          - --initial-advertise-peer-urls=http://$(POD_IP):2380
+          - --listen-peer-urls=http://0.0.0.0:2380
+          - --listen-client-urls=http://0.0.0.0:2379
+          - --advertise-client-urls=http://$(POD_IP).cilium-etcd:2379
+          - --initial-cluster-token=cilium-etcd
+          - --initial-cluster=$(PEERS)
+          - --initial-cluster-state=new
+        env:
+          - name: PEERS
+            value: cilium-etcd-0=http://cilium-etcd-0.cilium-etcd:2380,cilium-etcd-1=http://cilium-etcd-1.cilium-etcd:2380,cilium-etcd-2=http://cilium-etcd-2.cilium-etcd:2380
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+        ports:
+        - containerPort: 2379
+          name: client
+        - containerPort: 2380
+          name: peer
+        livenessProbe:
+          exec:
+            command:
+              - etcdctl
+              - endpoint
+              - status
+              - --endpoints=http://localhost:2379
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 10
+        readinessProbe:
+          exec:
+            command:
+              - etcdctl
+              - endpoint
+              - status
+              - --endpoints=http://localhost:2379
+          failureThreshold: 3
+          initialDelaySeconds: 1
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 5
+      volumes:
+        - name: data
+          emptyDir: {}
