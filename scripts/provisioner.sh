@@ -81,7 +81,7 @@ helm repo update
 # Replace variables in the values file and pipe it to 'helm upgrade --install'.
 envsubst < "${CILIUM_HELM_VALUES_FILE}" | \
   helm upgrade --install "${CILIUM_HELM_RELEASE_NAME}" "${CILIUM_HELM_CHART}" \
-    --version "${CILIUM_HELM_VERSION}" -n "${CILIUM_NAMESPACE}" -f /dev/stdin
+    --version "${CILIUM_HELM_VERSION}" -n "${CILIUM_NAMESPACE}" -f /dev/stdin ${CILIUM_HELM_EXTRA_ARGS}
 
 # Run any post-install script we may have been provided with.
 if [[ "${POST_CILIUM_INSTALL_SCRIPT}" != "" ]];

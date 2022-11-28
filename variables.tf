@@ -18,6 +18,12 @@ variable "cilium_helm_chart" {
   type        = string
 }
 
+variable "cilium_helm_extra_args" {
+  default     = ""
+  description = "Extra arguments to be passed to the 'helm upgrade --install' command that installs Cilium."
+  type        = string
+}
+
 variable "cilium_helm_release_name" {
   default     = "cilium"
   description = "The name of the Helm release to use for Cilium."
