@@ -35,6 +35,11 @@ variable "cilium_helm_values_file_path" {
   type        = string
 }
 
+variable "cilium_helm_values_override_file_path" {
+  description = "The path to the file containing the values to use when installing Cilium. These values will override the ones in 'cilium_helm_values_file_path'."
+  type        = string
+}
+
 variable "cilium_helm_version" {
   description = "The version of the Cilium Helm chart to install."
   type        = string
