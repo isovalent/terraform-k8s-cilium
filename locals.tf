@@ -13,20 +13,23 @@
 // limitations under the License.
 
 locals {
-  provisioner_environment = merge(var.extra_provisioner_environment_variables, local.provisioner_environment_variables)     // The full set of environment variables passed to the provisioning script.
-  provisioner_environment_variables = {                                                                                     // The set of environment variables set by this module on the provisioning script.
-    CILIUM_HELM_CHART            = var.cilium_helm_chart,                                                                   // The Cilium Helm chart to deploy.
-    CILIUM_HELM_EXTRA_ARGS       = var.cilium_helm_extra_args                                                               // Extra arguments to be passed to the 'helm upgrade --install' command that installs Cilium.
-    CILIUM_HELM_RELEASE_NAME     = var.cilium_helm_release_name,                                                            // The name to use for the Cilium Helm release.
-    CILIUM_HELM_VALUES_FILE      = var.cilium_helm_values_file_path,                                                        // The path to the Helm values file to use when installing Cilium.
-    CILIUM_HELM_VERSION          = var.cilium_helm_version,                                                                 // The version of the Cilium Helm chart to deploy.
-    CILIUM_NAMESPACE             = var.cilium_namespace,                                                                    // The namespace where to deploy Cilium.
-    DEPLOY_ETCD_CLUSTER          = var.deploy_etcd_cluster                                                                  // Whether to deploy an 'etcd' cluster suitable for usage as the Cilium key-value store.
-    INSTALL_KUBE_PROMETHEUS_CRDS = true,                                                                                    // Whether to install (some of) the 'kube-prometheus' CRDs (such as 'ServiceMonitor').
-    IPSEC_KEY                    = var.ipsec_key,                                                                           // The IPsec key to be used for transparent encryption.
-    KUBECONFIG                   = var.path_to_kubeconfig_file                                                              // The path to the kubeconfig file that will be created and output.
-    PRE_CILIUM_INSTALL_SCRIPT    = var.pre_cilium_install_script != "" ? base64encode(var.pre_cilium_install_script) : ""   // The script to execute before installing Cilium.
-    POST_CILIUM_INSTALL_SCRIPT   = var.post_cilium_install_script != "" ? base64encode(var.post_cilium_install_script) : "" // The script to execute after installing Cilium.
+  provisioner_environment = merge(var.extra_provisioner_environment_variables, local.provisioner_environment_variables)         // The full set of environment variables passed to the provisioning script.
+  provisioner_environment_variables = {                                                                                         // The set of environment variables set by this module on the provisioning script.
+    CILIUM_HELM_CHART                = var.cilium_helm_chart,                                                                   // The Cilium Helm chart to deploy.
+    CILIUM_HELM_EXTRA_ARGS           = var.cilium_helm_extra_args                                                               // Extra arguments to be passed to the 'helm upgrade --install' command that installs Cilium.
+    CILIUM_HELM_RELEASE_NAME         = var.cilium_helm_release_name,                                                            // The name to use for the Cilium Helm release.
+    CILIUM_HELM_VALUES_FILE          = var.cilium_helm_values_file_path,                                                        // The path to the Helm values file to use when installing Cilium.
+    CILIUM_HELM_VALUES_OVERRIDE_FILE = var.cilium_helm_values_override_file_path,                                               // The path to the Helm values override file to use when installing Cilium.
+    CILIUM_HELM_VERSION              = var.cilium_helm_version,                                                                 // The version of the Cilium Helm chart to deploy.
+    CILIUM_NAMESPACE                 = var.cilium_namespace,                                                                    // The namespace where to deploy Cilium.
+    DEPLOY_ETCD_CLUSTER              = var.deploy_etcd_cluster                                                                  // Whether to deploy an 'etcd' cluster suitable for usage as the Cilium key-value store.
+    INSTALL_KUBE_PROMETHEUS_CRDS     = true,                                                                                    // Whether to install (some of) the 'kube-prometheus' CRDs (such as 'ServiceMonitor').
+    IPSEC_KEY                        = var.ipsec_key,                                                                           // The IPsec key to be used for transparent encryption.
+    KUBECONFIG                       = var.path_to_kubeconfig_file                                                              // The path to the kubeconfig file that will be created and output.
+    PRE_CILIUM_INSTALL_SCRIPT        = var.pre_cilium_install_script != "" ? base64encode(var.pre_cilium_install_script) : ""   // The script to execute before installing Cilium.
+    POST_CILIUM_INSTALL_SCRIPT       = var.post_cilium_install_script != "" ? base64encode(var.post_cilium_install_script) : "" // The script to execute after installing Cilium.
   }
   provisioner_path = "${abspath(path.module)}/scripts/provisioner.sh"
 }
+
+
