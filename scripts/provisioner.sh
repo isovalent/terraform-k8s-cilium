@@ -78,10 +78,23 @@ fi
 # Get the latest information about charts from the respective chart repositories.
 helm repo update
 
-# Replace variables in the values file and pipe it to 'helm upgrade --install'.
-envsubst < "${CILIUM_HELM_VALUES_FILE}" | \
+# Substitute environment variables into the Cilium Helm values file.
+envsubst < "${CILIUM_HELM_VALUES_FILE}" > tmp1 
+
+if [[ "${CILIUM_HELM_VALUES_OVERRIDE_FILE}" != "" ]];
+then
+  # Substitute environment variables into the Cilium Helm values override file.
+  envsubst < "${CILIUM_HELM_VALUES_OVERRIDE_FILE}" | \
   helm upgrade --install "${CILIUM_HELM_RELEASE_NAME}" "${CILIUM_HELM_CHART}" \
-    --version "${CILIUM_HELM_VERSION}" -n "${CILIUM_NAMESPACE}" -f /dev/stdin ${CILIUM_HELM_EXTRA_ARGS}
+  --version "${CILIUM_HELM_VERSION}" -n "${CILIUM_NAMESPACE}" -f tmp1 -f /dev/stdin ${CILIUM_HELM_EXTRA_ARGS}
+  rm -f tmp1
+else
+  envsubst < tmp1 | \
+  helm upgrade --install "${CILIUM_HELM_RELEASE_NAME}" "${CILIUM_HELM_CHART}" \
+  --version "${CILIUM_HELM_VERSION}" -n "${CILIUM_NAMESPACE}" -f /dev/stdin ${CILIUM_HELM_EXTRA_ARGS}
+  rm -f tmp1
+fi
+
 
 # Run any post-install script we may have been provided with.
 if [[ "${POST_CILIUM_INSTALL_SCRIPT}" != "" ]];
