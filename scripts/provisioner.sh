@@ -84,13 +84,14 @@ envsubst < "${CILIUM_HELM_VALUES_FILE}" > tmp1
 if [[ "${CILIUM_HELM_VALUES_OVERRIDE_FILE}" != "" ]];
 then
   # Substitute environment variables into the Cilium Helm values override file.
-  envsubst < "${CILIUM_HELM_VALUES_OVERRIDE_FILE}" > tmp2
+  envsubst < "${CILIUM_HELM_VALUES_OVERRIDE_FILE}" | \
   helm upgrade --install "${CILIUM_HELM_RELEASE_NAME}" "${CILIUM_HELM_CHART}" \
-  --version "${CILIUM_HELM_VERSION}" -n "${CILIUM_NAMESPACE}" -f tmp1 -f tmp2
-  rm -f tmp1 tmp2
+  --version "${CILIUM_HELM_VERSION}" -n "${CILIUM_NAMESPACE}" -f tmp1 -f /dev/stdin ${CILIUM_HELM_EXTRA_ARGS}
+  rm -f tmp1
 else
+  envsubst < tmp1 | \
   helm upgrade --install "${CILIUM_HELM_RELEASE_NAME}" "${CILIUM_HELM_CHART}" \
-  --version "${CILIUM_HELM_VERSION}" -n "${CILIUM_NAMESPACE}" -f tmp1
+  --version "${CILIUM_HELM_VERSION}" -n "${CILIUM_NAMESPACE}" -f /dev/stdin ${CILIUM_HELM_EXTRA_ARGS}
   rm -f tmp1
 fi
 
@@ -100,5 +101,3 @@ if [[ "${POST_CILIUM_INSTALL_SCRIPT}" != "" ]];
 then
   base64 --decode <<< "${POST_CILIUM_INSTALL_SCRIPT}" | bash
 fi
-
-
