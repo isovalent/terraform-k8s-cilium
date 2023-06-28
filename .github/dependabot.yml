@@ -1,0 +1,9 @@
+version: 2
+updates:
+  - package-ecosystem: "terraform"
+    directory: /
+    schedule:
+      interval: "daily"
+      time: "23:00"
+      timezone: "Europe/Zurich"
+    open-pull-requests-limit: 3
