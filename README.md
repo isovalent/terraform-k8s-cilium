@@ -31,8 +31,10 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_cilium_helm_chart"></a> [cilium\_helm\_chart](#input\_cilium\_helm\_chart) | The name of the Helm chart to use to install Cilium. It is assumed that the Helm repository containing this chart has been added beforehand (e.g. using 'helm repo add'). | `string` | `"cilium/cilium"` | no |
+| <a name="input_cilium_helm_extra_args"></a> [cilium\_helm\_extra\_args](#input\_cilium\_helm\_extra\_args) | Extra arguments to be passed to the 'helm upgrade --install' command that installs Cilium. | `string` | `""` | no |
 | <a name="input_cilium_helm_release_name"></a> [cilium\_helm\_release\_name](#input\_cilium\_helm\_release\_name) | The name of the Helm release to use for Cilium. | `string` | `"cilium"` | no |
 | <a name="input_cilium_helm_values_file_path"></a> [cilium\_helm\_values\_file\_path](#input\_cilium\_helm\_values\_file\_path) | The path to the file containing the values to use when installing Cilium. | `string` | n/a | yes |
+| <a name="input_cilium_helm_values_override_file_path"></a> [cilium\_helm\_values\_override\_file\_path](#input\_cilium\_helm\_values\_override\_file\_path) | The path to the file containing the values to use when installing Cilium. These values will override the ones in 'cilium\_helm\_values\_file\_path'. | `string` | n/a | yes |
 | <a name="input_cilium_helm_version"></a> [cilium\_helm\_version](#input\_cilium\_helm\_version) | The version of the Cilium Helm chart to install. | `string` | n/a | yes |
 | <a name="input_cilium_namespace"></a> [cilium\_namespace](#input\_cilium\_namespace) | The namespace in which to install Cilium. | `string` | `"kube-system"` | no |
 | <a name="input_deploy_etcd_cluster"></a> [deploy\_etcd\_cluster](#input\_deploy\_etcd\_cluster) | Whether to deploy an 'etcd' cluster suitable for usage as the Cilium key-value store (HIGHLY EXPERIMENTAL). | `bool` | `false` | no |
