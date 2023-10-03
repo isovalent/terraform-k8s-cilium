@@ -32,11 +32,25 @@ do
   fi
 done
 
+# Wait for Kubernetes API to stabilize
+KAPI_REACHABILITY_COUNT=1
+set +e
+until kubectl get --raw='/readyz?verbose'
+do
+  if [[ ${KAPI_REACHABILITY_COUNT} -gt 180 ]];
+  then
+    echo "Failed to connect to the Kubernetes API or the Kubernetes API doesn't report an healthy state."
+    exit 1
+  else
+    KAPI_REACHABILITY_COUNT=$((KAPI_REACHABILITY_COUNT+1))
+    sleep 1
+  fi
+done
+set -e
+sleep 10
+
 # Create the target namespace if it does not exist.
-if ! kubectl get ns "${CILIUM_NAMESPACE}";
-then
-    kubectl create ns "${CILIUM_NAMESPACE}"
-fi
+kubectl create namespace "${CILIUM_NAMESPACE}" --dry-run=client -o yaml | kubectl apply -f -
 
 # Upsert or delete the IPsec secret to be used for transparent encryption.
 IPSEC_ENABLED=""
