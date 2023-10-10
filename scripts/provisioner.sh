@@ -68,7 +68,7 @@ export IPSEC_ENABLED
 # Manually create the 'ServiceMonitor' CRD from 'kube-prometheus' so we can enable the creation of 'ServiceMonitor' resources in the Cilium Helm chart.
 if [[ "${INSTALL_KUBE_PROMETHEUS_CRDS}" == "true" ]];
 then
-  kubectl apply -f "https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/release-0.11/manifests/setup/0servicemonitorCustomResourceDefinition.yaml"
+  kubectl apply -f "https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/release-0.13/manifests/setup/0servicemonitorCustomResourceDefinition.yaml"
   until kubectl get servicemonitors --all-namespaces;
   do
       echo "Waiting for the 'servicemonitors' CRD...";
