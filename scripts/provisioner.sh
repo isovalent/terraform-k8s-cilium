@@ -58,11 +58,12 @@ IPSEC_SECRET_NAME="cilium-ipsec-keys"
 if [[ "${IPSEC_KEY}" != "" ]];
 then
   IPSEC_ENABLED="true"
-  kubectl -n "${CILIUM_NAMESPACE}" create secret generic "${IPSEC_SECRET_NAME}" --from-literal=keys="${IPSEC_KEY}" --dry-run=client -o yaml | kubectl apply -f-
+  kubectl -n "${CILIUM_NAMESPACE}" create secret generic "${IPSEC_SECRET_NAME}" --from-literal=keys="3 rfc4106(gcm(aes)) $(echo $(dd if=/dev/urandom count=20 bs=1 2> /dev/null | xxd -p -c 64)) 128" --dry-run=client -o yaml | kubectl apply -f-
 else
   IPSEC_ENABLED="false"
   kubectl -n "${CILIUM_NAMESPACE}" delete secret "${IPSEC_SECRET_NAME}" --ignore-not-found
 fi
+
 export IPSEC_ENABLED
 
 # Manually create the 'ServiceMonitor' CRD from 'kube-prometheus' so we can enable the creation of 'ServiceMonitor' resources in the Cilium Helm chart.
