@@ -47,7 +47,6 @@ do
   fi
 done
 set -e
-sleep 10
 
 # If asked to, wait for the total number of control-plane nodes to be registered.
 set +e
