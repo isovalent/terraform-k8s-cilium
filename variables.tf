@@ -85,3 +85,15 @@ variable "post_cilium_install_script" {
   description = "A script to be run right after installing Cilium."
   type        = string
 }
+
+variable "total_control_plane_nodes" {
+  default     = 3
+  description = "The number of control-plane nodes expected in the cluster."
+  type        = number
+}
+
+variable "wait_for_total_control_plane_nodes" {
+  default     = false
+  description = "Whether to wait for the expected number of control-plane nodes to be registered before applying any changes."
+  type        = bool
+}

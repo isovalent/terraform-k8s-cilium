@@ -49,6 +49,17 @@ done
 set -e
 sleep 10
 
+# If asked to, wait for the total number of control-plane nodes to be registered.
+set +e
+if [[ "${WAIT_FOR_TOTAL_CONTROL_PLANE_NODES}" == "true" ]];
+then
+  until [[ $(kubectl get node -l node-role.kubernetes.io/control-plane --no-headers | wc -l) == "${TOTAL_CONTROL_PLANE_NODES}" ]];
+  do
+    sleep 1
+  done
+fi
+set -e
+
 # Create the target namespace if it does not exist.
 kubectl create namespace "${CILIUM_NAMESPACE}" --dry-run=client -o yaml | kubectl apply -f -
 
