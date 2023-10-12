@@ -43,6 +43,8 @@ No modules.
 | <a name="input_path_to_kubeconfig_file"></a> [path\_to\_kubeconfig\_file](#input\_path\_to\_kubeconfig\_file) | The path to the kubeconfig file to use. | `string` | n/a | yes |
 | <a name="input_post_cilium_install_script"></a> [post\_cilium\_install\_script](#input\_post\_cilium\_install\_script) | A script to be run right after installing Cilium. | `string` | `""` | no |
 | <a name="input_pre_cilium_install_script"></a> [pre\_cilium\_install\_script](#input\_pre\_cilium\_install\_script) | A script to be run right before installing Cilium. | `string` | `""` | no |
+| <a name="input_total_control_plane_nodes"></a> [total\_control\_plane\_nodes](#input\_total\_control\_plane\_nodes) | The number of control-plane nodes expected in the cluster. | `number` | `3` | no |
+| <a name="input_wait_for_total_control_plane_nodes"></a> [wait\_for\_total\_control\_plane\_nodes](#input\_wait\_for\_total\_control\_plane\_nodes) | Whether to wait for the expected number of control-plane nodes to be registered before applying any changes. | `bool` | `false` | no |
 
 ## Outputs
 
