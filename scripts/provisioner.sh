@@ -52,9 +52,17 @@ set -e
 set +e
 if [[ "${WAIT_FOR_TOTAL_CONTROL_PLANE_NODES}" == "true" ]];
 then
-  until [[ $(kubectl get node -l node-role.kubernetes.io/control-plane --no-headers | wc -l) == "${TOTAL_CONTROL_PLANE_NODES}" ]];
+  WAIT_FOR_TOTAL_CONTROL_PLANE_NODES_ATTEMPT_NUM=1
+  until [[ $(kubectl get node -l "${CONTROL_PLANE_NODES_LABEL_SELECTOR}" --no-headers | wc -l) == "${TOTAL_CONTROL_PLANE_NODES}" ]];
   do
-    sleep 1
+    if [[ ${WAIT_FOR_TOTAL_CONTROL_PLANE_NODES_ATTEMPT_NUM} -gt 180 ]];
+    then
+      echo "Timed out while waiting for the total number of control-plane nodes."
+      exit 1
+    else
+      WAIT_FOR_TOTAL_CONTROL_PLANE_NODES_ATTEMPT_NUM=$((WAIT_FOR_TOTAL_CONTROL_PLANE_NODES_ATTEMPT_NUM+1))
+      sleep 1
+    fi
   done
 fi
 set -e

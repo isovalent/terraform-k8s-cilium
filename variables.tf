@@ -57,6 +57,12 @@ variable "deploy_etcd_cluster" {
   type        = bool
 }
 
+variable "control_plane_nodes_label_selector" {
+  default     = "node-role.kubernetes.io/control-plane"
+  description = "The label selector used to filter control-plane nodes."
+  type        = string
+}
+
 variable "extra_provisioner_environment_variables" {
   default     = {}
   description = "A map of extra environment variables to include when executing the provisioning script."
