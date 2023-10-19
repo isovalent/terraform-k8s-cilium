@@ -53,7 +53,7 @@ set +e
 if [[ "${WAIT_FOR_TOTAL_CONTROL_PLANE_NODES}" == "true" ]];
 then
   WAIT_FOR_TOTAL_CONTROL_PLANE_NODES_ATTEMPT_NUM=1
-  until [[ $(kubectl get node -l "${CONTROL_PLANE_NODES_LABEL_SELECTOR}" --no-headers | wc -l) == "${TOTAL_CONTROL_PLANE_NODES}" ]];
+  until [[ $(kubectl get node -l "${CONTROL_PLANE_NODES_LABEL_SELECTOR}" --no-headers | wc -l | tr -d '[:space:]') == "${TOTAL_CONTROL_PLANE_NODES}" ]];
   do
     if [[ ${WAIT_FOR_TOTAL_CONTROL_PLANE_NODES_ATTEMPT_NUM} -gt 180 ]];
     then
