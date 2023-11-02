@@ -24,7 +24,8 @@ locals {
     CILIUM_NAMESPACE                   = var.cilium_namespace,                                                                    // The namespace where to deploy Cilium.
     CONTROL_PLANE_NODES_LABEL_SELECTOR = var.control_plane_nodes_label_selector,                                                  // The label selector used to filter control-plane nodes.
     DEPLOY_ETCD_CLUSTER                = var.deploy_etcd_cluster                                                                  // Whether to deploy an 'etcd' cluster suitable for usage as the Cilium key-value store.
-    INSTALL_KUBE_PROMETHEUS_CRDS       = true,                                                                                    // Whether to install (some of) the 'kube-prometheus' CRDs (such as 'ServiceMonitor').
+    INSTALL_KUBE_PROMETHEUS_CRDS       = var.install_kube_prometheus_servicemonitor_crd,                                          // Whether to install the 'kube-prometheus' ServiceMonitor CRD.
+    KUBE_PROMETHEUS_CRDS_VERSION       = var.kube_prometheus_crds_version,                                                        // Version of the 'kube-prometheus' ServiceMonitor CRD to install.
     IPSEC_KEY                          = var.ipsec_key,                                                                           // The IPsec key to be used for transparent encryption.
     KUBECONFIG                         = var.path_to_kubeconfig_file                                                              // The path to the kubeconfig file that will be created and output.
     PRE_CILIUM_INSTALL_SCRIPT          = var.pre_cilium_install_script != "" ? base64encode(var.pre_cilium_install_script) : ""   // The script to execute before installing Cilium.

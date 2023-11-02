@@ -103,3 +103,15 @@ variable "wait_for_total_control_plane_nodes" {
   description = "Whether to wait for the expected number of control-plane nodes to be registered before applying any changes."
   type        = bool
 }
+
+variable "install_kube_prometheus_servicemonitor_crd" {
+  default     = true
+  description = "Whether to install the 'kube-prometheus' ServiceMonitor CRD."
+  type        = bool
+}
+
+variable "kube_prometheus_crds_version" {
+  default     = "v0.13.0"
+  description = "Version of the 'kube-prometheus' ServiceMonitor CRD to install."
+  type        = string
+}
