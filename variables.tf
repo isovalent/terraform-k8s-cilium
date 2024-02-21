@@ -110,6 +110,18 @@ variable "install_kube_prometheus_servicemonitor_crd" {
   type        = bool
 }
 
+variable "disable_kube_proxy" {
+  default     = false
+  description = "Whether to disable the kube proxy so the cluster uses kube-proxy replacement"
+  type        = bool
+}
+
+variable "kube_proxy_namespace" {
+  default     = "kube-system"
+  description = "Whether to disable the kube proxy so the cluster uses kube-proxy replacement"
+}
+
+
 variable "kube_prometheus_crds_version" {
   default     = "v0.13.0"
   description = "Version of the 'kube-prometheus' ServiceMonitor CRD to install."
