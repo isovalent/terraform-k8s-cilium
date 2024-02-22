@@ -119,6 +119,7 @@ variable "disable_kube_proxy" {
 variable "kube_proxy_namespace" {
   default     = "kube-system"
   description = "Whether to disable the kube proxy so the cluster uses kube-proxy replacement"
+  type        = string
 }
 
 
