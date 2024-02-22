@@ -133,3 +133,18 @@ if [[ "${POST_CILIUM_INSTALL_SCRIPT}" != "" ]];
 then
   base64 --decode <<< "${POST_CILIUM_INSTALL_SCRIPT}" | bash
 fi
+
+# try to delete the kube-proxy and clear the iptabls using the cilum pods after we install the cilium
+if [[ "${DISABLE_KUBE_PROXY}" == "true" ]]; then
+  kubectl -n "${KUBE_PROXY_NAMESPACE}" delete daemonset kube-proxy || true
+  kubectl -n "${KUBE_PROXY_NAMESPACE}" delete cm kube-proxy || true
+  kubectl wait --for=condition=Ready pod -l k8s-app=cilium -n "${CILIUM_NAMESPACE}" 
+  pods=$(kubectl get pods -l k8s-app=cilium -o name -n "${CILIUM_NAMESPACE}")
+  if [ -n "$pods" ]; then
+      while IFS= read -r pod; do
+          kubectl -n "${CILIUM_NAMESPACE}" exec $pod -- sh -c 'iptables-save | grep -v KUBE | iptables-restore' 
+      done <<< "$pods"
+  else
+      echo "No pods found with label k8s-app=cilium in cilium namespace"
+  fi
+fi
