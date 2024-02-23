@@ -26,7 +26,7 @@ jobs:
       with:
         ref: ${{ github.ref }}
     - name: Render terraform docs and push changes back to PR branch
-      uses: terraform-docs/gh-actions@cfde42f79b15256c71f4b79ae1d6acea0f689952
+      uses: terraform-docs/gh-actions@7c16aaaacc92335d6d5c5d43778448deebaa3798
       with:
         working-dir: . 
         output-file: README.md
