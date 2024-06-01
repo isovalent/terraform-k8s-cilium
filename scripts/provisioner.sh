@@ -107,6 +107,9 @@ then
   base64 --decode <<< "${PRE_CILIUM_INSTALL_SCRIPT}" | bash
 fi
 
+# Setup Helm repository.
+helm repo add cilium https://helm.cilium.io/
+
 # Get the latest information about charts from the respective chart repositories.
 helm repo update
 
