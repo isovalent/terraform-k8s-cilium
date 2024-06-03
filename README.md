@@ -2,6 +2,14 @@
 
 An opinionated Terraform module that can be used to install and manage Cilium on top of a Kubernetes cluster.
 
+## Prerequisites
+Ensure the Helm repository is pre-configured (the one you're referring to in the `cilium_helm_chart` input variable). Example:
+```bash
+helm repo add cilium https://helm.cilium.io/
+```
+
+Check the official Cilium [Installation using Helm](https://docs.cilium.io/en/stable/installation/k8s-install-helm/#install-cilium) documentation for more details.
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
