@@ -138,7 +138,7 @@ fi
 if [[ "${DISABLE_KUBE_PROXY}" == "true" ]]; then
   kubectl -n "${KUBE_PROXY_NAMESPACE}" delete daemonset kube-proxy || true
   kubectl -n "${KUBE_PROXY_NAMESPACE}" delete cm kube-proxy || true
-  kubectl wait --for=condition=Ready pod -l k8s-app=cilium -n "${CILIUM_NAMESPACE}" 
+  kubectl wait --timeout=300s --for=condition=Ready pod -l k8s-app=cilium -n "${CILIUM_NAMESPACE}" 
   pods=$(kubectl get pods -l k8s-app=cilium -o name -n "${CILIUM_NAMESPACE}")
   if [ -n "$pods" ]; then
       while IFS= read -r pod; do
