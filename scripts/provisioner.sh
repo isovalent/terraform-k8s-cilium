@@ -111,7 +111,13 @@ fi
 helm repo update
 
 # Substitute environment variables into the Cilium Helm values file.
-envsubst < "${CILIUM_HELM_VALUES_FILE}" > tmp1 
+envsubst < "${CILIUM_HELM_VALUES_FILE}" > tmp1
+
+# Just try to wait a bit to avoid this  https://github.com/isovalent/terraform-k8s-cilium/issues/42 issue. If the file is still not available in 5 seconds, we will let helm install to throw out the error.
+while [ ! -f "tmp1" ]; do
+    echo "File tmp1 not found, waiting..."
+    sleep 5
+done
 
 if [[ "${CILIUM_HELM_VALUES_OVERRIDE_FILE}" != "" ]];
 then
