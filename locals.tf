@@ -33,7 +33,8 @@ locals {
     TOTAL_CONTROL_PLANE_NODES          = var.total_control_plane_nodes                                                            // The number of control-plane nodes expected in the cluster.
     WAIT_FOR_TOTAL_CONTROL_PLANE_NODES = var.wait_for_total_control_plane_nodes                                                   // Whether to wait for the expected number of control-plane nodes to be registered before applying any changes.
     DISABLE_KUBE_PROXY                 = var.disable_kube_proxy                                                                   // Wether to disable the kube proxy after the cilium
-    KUBE_PROXY_NAMESPACE               = var.kube_proxy_namespace                                                                 // the namespace contains the kube-proxy, it should be kube-system most of the case but leave this as the var in case we found some k8s distribution use something else
+    KUBE_PROXY_NAMESPACE               = var.kube_proxy_namespace                                                                 // The namespace contains the kube-proxy, it should be kube-system most of the case but leave this as the var in case we found some k8s distribution use something else
+    CILIUM_WAIT_TIMER                  = var.cilium_wait_timer                                                                    // Makes the time waiting on kubeconfig configurable by users
   }
   provisioner_path = "${abspath(path.module)}/scripts/provisioner.sh"
 }
