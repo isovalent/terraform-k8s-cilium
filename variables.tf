@@ -128,3 +128,9 @@ variable "kube_prometheus_crds_version" {
   description = "Version of the 'kube-prometheus' ServiceMonitor CRD to install."
   type        = string
 }
+
+variable "cilium_wait_timer" {
+  default     = 1800
+  type        = number
+  description = "Timer to wait for kubeconfig before completing the cilium install"
+}
