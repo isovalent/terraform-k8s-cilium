@@ -2,6 +2,10 @@
 
 An opinionated Terraform module that can be used to install and manage Cilium on top of a Kubernetes cluster.
 
+> [!IMPORTANT]
+> This Terraform module is not part of [Isovalent Networking for Kubernetes](https://isovalent.com/product/).
+> For supported install methods of Isovalent's enterprise products, please see the [Isovalent Enterpise Platform documentation](https://docs.isovalent.com/).
+
 ## Prerequisites
 Ensure the Helm repository is pre-configured (the one you're referring to in the `cilium_helm_chart` input variable). Example:
 ```bash
