@@ -15,30 +15,30 @@ helm repo add cilium https://helm.cilium.io/
 Check the official Cilium [Installation using Helm](https://docs.cilium.io/en/stable/installation/k8s-install-helm/#install-cilium) documentation for more details.
 
 <!-- BEGIN_TF_DOCS -->
-### Requirements
+## Requirements
 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.2.0 |
 | <a name="requirement_null"></a> [null](#requirement\_null) | >= 3.1.1 |
 
-### Providers
+## Providers
 
 | Name | Version |
 |------|---------|
 | <a name="provider_null"></a> [null](#provider\_null) | >= 3.1.1 |
 
-### Modules
+## Modules
 
 No modules.
 
-### Resources
+## Resources
 
 | Name | Type |
 |------|------|
 | [null_resource.main](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 
-### Inputs
+## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
@@ -64,7 +64,7 @@ No modules.
 | <a name="input_total_control_plane_nodes"></a> [total\_control\_plane\_nodes](#input\_total\_control\_plane\_nodes) | The number of control-plane nodes expected in the cluster. | `number` | `3` | no |
 | <a name="input_wait_for_total_control_plane_nodes"></a> [wait\_for\_total\_control\_plane\_nodes](#input\_wait\_for\_total\_control\_plane\_nodes) | Whether to wait for the expected number of control-plane nodes to be registered before applying any changes. | `bool` | `false` | no |
 
-### Outputs
+## Outputs
 
 No outputs.
 <!-- END_TF_DOCS -->
