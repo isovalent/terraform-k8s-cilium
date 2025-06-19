@@ -18,11 +18,13 @@ set -euxo pipefail
 
 ROOT="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
+CILIUM_WAIT_TIMER="${CILIUM_WAIT_TIMER:-'1800'}"
+
 # Wait for the KUBECONFIG file to be created.
 COUNT=1
 until [[ -f "${KUBECONFIG}" ]];
 do
-  if [[ ${COUNT} -gt 1800 ]];
+  if [[ ${COUNT} -gt "${CILIUM_WAIT_TIMER}" ]];
   then
     echo "Failed to find KUBECONFIG."
     exit 1
