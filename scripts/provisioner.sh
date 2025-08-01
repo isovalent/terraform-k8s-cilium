@@ -142,11 +142,24 @@ fi
 if [[ "${DISABLE_KUBE_PROXY}" == "true" ]]; then
   kubectl -n "${KUBE_PROXY_NAMESPACE}" delete daemonset kube-proxy || true
   kubectl -n "${KUBE_PROXY_NAMESPACE}" delete cm kube-proxy || true
-  kubectl wait --timeout=300s --for=condition=Ready pod -l k8s-app=cilium -n "${CILIUM_NAMESPACE}" 
+  max_retry=60
+  for ((i=1; i<=max_retry; i++)); do
+    if ((i==max_retry)); then
+      echo "❌ Timeout: Cilium pod was not created after timeout."
+      exit 1
+    fi
+    if kubectl get pod -n "${CILIUM_NAMESPACE}" -l k8s-app=cilium 2>/dev/null | grep -q cilium; then
+      break
+    fi
+    sleep 5
+  done
+
+
+  kubectl wait --timeout=300s --for=condition=Ready pod -l k8s-app=cilium -n "${CILIUM_NAMESPACE}"
   pods=$(kubectl get pods -l k8s-app=cilium -o name -n "${CILIUM_NAMESPACE}")
   if [ -n "$pods" ]; then
       while IFS= read -r pod; do
-          kubectl -n "${CILIUM_NAMESPACE}" exec $pod -- sh -c 'iptables-save | grep -v KUBE | iptables-restore' 
+          kubectl -n "${CILIUM_NAMESPACE}" exec $pod -- sh -c 'iptables-save | grep -v KUBE | iptables-restore'
       done <<< "$pods"
   else
       echo "No pods found with label k8s-app=cilium in cilium namespace"
