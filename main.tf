@@ -17,6 +17,7 @@ resource "null_resource" "main" {
   triggers = merge(local.provisioner_environment, {
     CILIUM_HELM_VALUES_FILE_SHA1 = sha1(file(var.cilium_helm_values_file_path)) // Use the contents of the Cilium (base) Helm values file as a trigger.
     PROVISIONER_SHA1             = sha1(file(local.provisioner_path)),          // Use the contents of the provisioning script as a trigger.
+    KUBECONFIG                   = sha1(file(var.path_to_kubeconfig_file))      // Use the contents of the kubeconfig as a trigger
   })
   provisioner "local-exec" {
     command     = local.provisioner_path        // The path to the provisioning script.
