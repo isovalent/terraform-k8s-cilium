@@ -134,3 +134,9 @@ variable "cilium_wait_timer" {
   type        = number
   description = "Timer to wait for kubeconfig before completing the cilium install"
 }
+
+variable "dependency_trigger" {
+  description = "An arbitrary value that, when changed, can be used to trigger updates. Used here to enforce an implicit dependency on another module's resource."
+  type        = any
+  default     = null
+}
