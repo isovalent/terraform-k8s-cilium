@@ -1,19 +1,7 @@
 SHELL := /bin/bash
 
-.PHONY: docs
 .DEFAULT_GOAL := help
 
-## Generate/update terraform docs inside README.md (https://terraform-docs.io/user-guide/introduction/)
-docs:
-	terraform-docs .
-
-# COLORS
-GREEN  := $(shell tput -Txterm setaf 2)
-YELLOW := $(shell tput -Txterm setaf 3)
-WHITE  := $(shell tput -Txterm setaf 7)
-RESET  := $(shell tput -Txterm sgr0)
-
-TARGET_MAX_CHAR_NUM=20
 ## Show this help
 help:
 	@echo ''
